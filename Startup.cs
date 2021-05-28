@@ -1,10 +1,8 @@
-using System;
 using CreditCardApi.Data;
 using CreditCardApi.Repository;
 using CreditCardApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +27,7 @@ namespace CreditCardApi
 
       services.AddScoped<ICreditCardRepository, CreditCardRepository>();
       services.AddScoped<ICreditCardGenerator, CreditCardGenerator>();
+      services.AddSwaggerGen();
     }
 
 
@@ -38,6 +37,13 @@ namespace CreditCardApi
       {
         app.UseDeveloperExceptionPage();
       }
+
+      app.UseSwagger();
+
+      app.UseSwaggerUI(c =>
+      {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "CreditCard API V1");
+      });
 
       app.UseRouting();
 

@@ -39,15 +39,17 @@ namespace CreditCardApi.Controllers
     [HttpGet]
     public ActionResult<List<CardDto>> GetCardsByEmail([FromQuery] RequestDto request)
     {
-      List<CreditCard> cards = _repository.GetCardsByEmail(request.email);
-      if (cards.Count != 0)
+      List<CardDto> cardsDto = new List<CardDto>();
+
+      _repository.GetCardsByEmail(request.email)
+        .ForEach(
+          c => cardsDto.Add(
+            Mapper.ModelToDto(c)
+          )
+        );
+
+      if (cardsDto.Count != 0)
       {
-        List<CardDto> cardsDto = new List<CardDto>();
-
-        //Mapeamento de CreditCard para CardDto
-        foreach (var card in cards)
-          cardsDto.Add(Mapper.ModelToDto(card));
-
         return Ok(cardsDto);
       }
 
